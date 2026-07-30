@@ -1,0 +1,50 @@
+{
+  "Data": {
+    "Account": [
+      {
+        "AccountId": "6a620055c47905bfc3f19693",
+        "InternationalAccount": false,
+        "Status": "Enabled",
+        "StatusUpdateDateTime": "2019-01-01T06:06:06.000Z",
+        "Currency": "GBP",
+        "AccountCategory": "Personal",
+        "AccountTypeCode": "CACC",
+        "Description": "For paying bills",
+        "Nickname": "Bills",
+        "OpeningDate": "2002-01-05T00:00:00.000Z",
+        "MaturityDate": "2019-01-01T06:06:06.000Z",
+        "SwitchStatus": "UK.CASS.NotSwitched",
+        "Account": [
+          {
+            "LEI": "9193001QZMP2PQT4AK86",
+            "Name": "NIVASGANESAN",
+            "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+            "Identification": "83410549645660",
+            "SecondaryIdentification": "21173"
+          }
+        ],
+        "Servicer": {
+          "Name": "ServicerName",
+          "SchemeName": "UK.OBIE.BICFI",
+          "Identification": "8020441910203345"
+        },
+        "StatementFrequencyAndFormat": [
+          {
+            "Format": "DPDF",
+            "Frequency": "YEAR",
+            "DeliveryAddress": {
+              "Floor": "6",
+              "Country": "UK",
+              "PostCode": "Z78 4TY",
+              "TownName": "London",
+              "StreetName": "Bank Street",
+              "AddressType": "HOME",
+              "BuildingNumber": "11"
+            },
+            "CommunicationMethod": "EMAL"
+          }
+        ]
+      }
+    ]
+  }
+}

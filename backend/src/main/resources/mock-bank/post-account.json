@@ -1,0 +1,38 @@
+{
+  "Data": {
+    "Account": [
+      {
+        "AccountId": "6a644e30c47905bfc3f1985f",
+        "Nickname": "Emergency",
+        "StatusUpdateDateTime": "2026-07-25T05:48:30.909Z",
+        "OpeningDate": "2026-07-25T05:48:30.909Z",
+        "Status": "Enabled",
+        "AccountCategory": "Personal",
+        "AccountTypeCode": "CACC",
+        "Currency": "GBP",
+        "Account": [
+          {
+            "Name": "Ms. Jared Schneider",
+            "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+            "Identification": "57713372763358",
+            "SecondaryIdentification": "35045"
+          }
+        ],
+        "Servicer": {
+          "Name": "ServicerNameSample",
+          "SchemeName": "UK.OBIE.BICFI",
+          "Identification": "SC802001"
+        },
+        "StatementFrequencyAndFormat": [
+          {
+            "Format": "DPDF",
+            "Frequency": "DAIL",
+            "CommunicationMethod": "EMAL"
+          }
+        ],
+        "InternationalAccount": false,
+        "MaturityDate": "2026-07-20T07:24:05.211Z"
+      }
+    ]
+  }
+}

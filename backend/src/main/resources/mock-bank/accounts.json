@@ -1,0 +1,298 @@
+{
+  "Data": {
+    "Account": [
+      {
+        "AccountId": "6a620055c47905bfc3f19693",
+        "InternationalAccount": false,
+        "Status": "Enabled",
+        "StatusUpdateDateTime": "2019-01-01T06:06:06.000Z",
+        "Currency": "GBP",
+        "AccountCategory": "Personal",
+        "AccountTypeCode": "CACC",
+        "Description": "For paying bills",
+        "Nickname": "Bills",
+        "OpeningDate": "2002-01-05T00:00:00.000Z",
+        "MaturityDate": "2019-01-01T06:06:06.000Z",
+        "SwitchStatus": "UK.CASS.NotSwitched",
+        "Account": [
+          {
+            "LEI": "9193001QZMP2PQT4AK86",
+            "Name": "NIVASGANESAN",
+            "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+            "Identification": "83410549645660",
+            "SecondaryIdentification": "21173"
+          }
+        ],
+        "Servicer": {
+          "Name": "ServicerName",
+          "SchemeName": "UK.OBIE.BICFI",
+          "Identification": "8020441910203345"
+        },
+        "StatementFrequencyAndFormat": [
+          {
+            "Format": "DPDF",
+            "Frequency": "YEAR",
+            "DeliveryAddress": {
+              "Floor": "6",
+              "Country": "UK",
+              "PostCode": "Z78 4TY",
+              "TownName": "London",
+              "StreetName": "Bank Street",
+              "AddressType": "HOME",
+              "BuildingNumber": "11"
+            },
+            "CommunicationMethod": "EMAL"
+          }
+        ]
+      },
+      {
+        "AccountId": "6a620055c47905bfc3f196a1",
+        "InternationalAccount": false,
+        "Status": "Enabled",
+        "StatusUpdateDateTime": "2019-01-01T06:06:06.000Z",
+        "Currency": "GBP",
+        "AccountCategory": "Personal",
+        "AccountTypeCode": "CACC",
+        "Description": "For paying bills",
+        "Nickname": "Household",
+        "OpeningDate": "2002-01-05T00:00:00.000Z",
+        "MaturityDate": "2019-01-01T06:06:06.000Z",
+        "SwitchStatus": "UK.CASS.NotSwitched",
+        "Account": [
+          {
+            "LEI": "9193001QZMP2PQT4AK86",
+            "Name": "NIVASGANESAN",
+            "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+            "Identification": "60858168910776",
+            "SecondaryIdentification": "90925"
+          }
+        ],
+        "Servicer": {
+          "Name": "ServicerName",
+          "SchemeName": "UK.OBIE.BICFI",
+          "Identification": "8020441910203346"
+        },
+        "StatementFrequencyAndFormat": [
+          {
+            "Format": "DPDF",
+            "Frequency": "YEAR",
+            "DeliveryAddress": {
+              "Floor": "6",
+              "Country": "UK",
+              "PostCode": "Z78 4TY",
+              "TownName": "London",
+              "StreetName": "Bank Street",
+              "AddressType": "HOME",
+              "BuildingNumber": "11"
+            },
+            "CommunicationMethod": "EMAL"
+          }
+        ]
+      },
+      {
+        "AccountId": "6a620055c47905bfc3f196af",
+        "InternationalAccount": false,
+        "Status": "Enabled",
+        "StatusUpdateDateTime": "2019-01-01T06:06:06.000Z",
+        "Currency": "GBP",
+        "AccountCategory": "Personal",
+        "AccountTypeCode": "CACC",
+        "Description": "For paying bills",
+        "Nickname": "Savings",
+        "OpeningDate": "2002-01-05T00:00:00.000Z",
+        "MaturityDate": "2019-01-01T06:06:06.000Z",
+        "SwitchStatus": "UK.CASS.NotSwitched",
+        "Account": [
+          {
+            "LEI": "9193001QZMP2PQT4AK86",
+            "Name": "NIVASGANESAN",
+            "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+            "Identification": "18373090484685",
+            "SecondaryIdentification": "31052"
+          }
+        ],
+        "Servicer": {
+          "Name": "ServicerName",
+          "SchemeName": "UK.OBIE.BICFI",
+          "Identification": "8020441910203347"
+        },
+        "StatementFrequencyAndFormat": [
+          {
+            "Format": "DPDF",
+            "Frequency": "YEAR",
+            "DeliveryAddress": {
+              "Floor": "6",
+              "Country": "UK",
+              "PostCode": "Z78 4TY",
+              "TownName": "London",
+              "StreetName": "Bank Street",
+              "AddressType": "HOME",
+              "BuildingNumber": "11"
+            },
+            "CommunicationMethod": "EMAL"
+          }
+        ]
+      },
+      {
+        "AccountId": "6a620987c47905bfc3f1975e",
+        "InternationalAccount": false,
+        "Status": "Enabled",
+        "StatusUpdateDateTime": "2026-07-23T12:31:03.221Z",
+        "Currency": "GBP",
+        "AccountCategory": "Personal",
+        "AccountTypeCode": "CACC",
+        "Nickname": "Holiday Fund",
+        "OpeningDate": "2026-07-23T12:31:03.221Z",
+        "MaturityDate": "2026-07-20T07:24:05.211Z",
+        "Account": [
+          {
+            "Name": "Renee Boyle V",
+            "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+            "Identification": "22443563612838",
+            "SecondaryIdentification": "21652"
+          }
+        ],
+        "Servicer": {
+          "Name": "ServicerNameSample",
+          "SchemeName": "UK.OBIE.BICFI",
+          "Identification": "SC802001"
+        },
+        "StatementFrequencyAndFormat": [
+          {
+            "Format": "DPDF",
+            "Frequency": "DAIL",
+            "CommunicationMethod": "EMAL"
+          }
+        ]
+      },
+      {
+        "AccountId": "6a620995c47905bfc3f19764",
+        "InternationalAccount": false,
+        "Status": "Enabled",
+        "StatusUpdateDateTime": "2026-07-23T12:31:17.294Z",
+        "Currency": "GBP",
+        "AccountCategory": "Personal",
+        "AccountTypeCode": "CACC",
+        "Nickname": "Everyday",
+        "OpeningDate": "2026-07-23T12:31:17.294Z",
+        "MaturityDate": "2026-07-20T07:24:05.211Z",
+        "Account": [
+          {
+            "Name": "Alton Brekke",
+            "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+            "Identification": "29920095881787",
+            "SecondaryIdentification": "93296"
+          }
+        ],
+        "Servicer": {
+          "Name": "ServicerNameSample",
+          "SchemeName": "UK.OBIE.BICFI",
+          "Identification": "SC802001"
+        },
+        "StatementFrequencyAndFormat": [
+          {
+            "Format": "DPDF",
+            "Frequency": "DAIL",
+            "CommunicationMethod": "EMAL"
+          }
+        ]
+      },
+      {
+        "AccountId": "6a6209afc47905bfc3f1976a",
+        "InternationalAccount": false,
+        "Status": "Enabled",
+        "StatusUpdateDateTime": "2026-07-23T12:31:43.619Z",
+        "Currency": "GBP",
+        "AccountCategory": "Personal",
+        "AccountTypeCode": "CACC",
+        "Nickname": "Holiday Fund",
+        "OpeningDate": "2026-07-23T12:31:43.619Z",
+        "MaturityDate": "2026-07-20T07:24:05.211Z",
+        "Account": [
+          {
+            "Name": "Amelia Monahan",
+            "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+            "Identification": "58354854488788",
+            "SecondaryIdentification": "26352"
+          }
+        ],
+        "Servicer": {
+          "Name": "ServicerNameSample",
+          "SchemeName": "UK.OBIE.BICFI",
+          "Identification": "SC802001"
+        },
+        "StatementFrequencyAndFormat": [
+          {
+            "Format": "DPDF",
+            "Frequency": "DAIL",
+            "CommunicationMethod": "EMAL"
+          }
+        ]
+      },
+      {
+        "AccountId": "6a644aa5c47905bfc3f1984e",
+        "InternationalAccount": false,
+        "Status": "Enabled",
+        "StatusUpdateDateTime": "2026-07-25T05:33:23.969Z",
+        "Currency": "GBP",
+        "AccountCategory": "Personal",
+        "AccountTypeCode": "CACC",
+        "Nickname": "Bills",
+        "OpeningDate": "2026-07-25T05:33:23.969Z",
+        "MaturityDate": "2026-07-20T07:24:05.211Z",
+        "Account": [
+          {
+            "Name": "Sandra Lueilwitz",
+            "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+            "Identification": "79389334797117",
+            "SecondaryIdentification": "22028"
+          }
+        ],
+        "Servicer": {
+          "Name": "ServicerNameSample",
+          "SchemeName": "UK.OBIE.BICFI",
+          "Identification": "SC802001"
+        },
+        "StatementFrequencyAndFormat": [
+          {
+            "Format": "DPDF",
+            "Frequency": "DAIL",
+            "CommunicationMethod": "EMAL"
+          }
+        ]
+      },
+      {
+        "AccountId": "6a644e30c47905bfc3f1985f",
+        "InternationalAccount": false,
+        "Status": "Enabled",
+        "StatusUpdateDateTime": "2026-07-25T05:48:30.909Z",
+        "Currency": "GBP",
+        "AccountCategory": "Personal",
+        "AccountTypeCode": "CACC",
+        "Nickname": "Emergency",
+        "OpeningDate": "2026-07-25T05:48:30.909Z",
+        "MaturityDate": "2026-07-20T07:24:05.211Z",
+        "Account": [
+          {
+            "Name": "Ms. Jared Schneider",
+            "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+            "Identification": "57713372763358",
+            "SecondaryIdentification": "35045"
+          }
+        ],
+        "Servicer": {
+          "Name": "ServicerNameSample",
+          "SchemeName": "UK.OBIE.BICFI",
+          "Identification": "SC802001"
+        },
+        "StatementFrequencyAndFormat": [
+          {
+            "Format": "DPDF",
+            "Frequency": "DAIL",
+            "CommunicationMethod": "EMAL"
+          }
+        ]
+      }
+    ]
+  }
+}
