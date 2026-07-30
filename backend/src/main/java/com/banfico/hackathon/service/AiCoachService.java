@@ -93,7 +93,7 @@ public class AiCoachService {
     }
 
     /** Conversational assistant. Pass prior turns to keep context. */
-    public Map<String, Object> chat(String question, List<Map<String, String>> history) {
+    public Map<String, Object> chat(String question, List<Map<String, Object>> history) {
         Insights.Overview overview = aggregation.overview();
         AiReply reply = ask(buildContext(overview, aggregation.allTransactions()), question, history,
                 overview, aggregation.allTransactions());
@@ -117,7 +117,7 @@ public class AiCoachService {
         }
     }
 
-    private AiReply ask(String context, String question, List<Map<String, String>> history,
+    private AiReply ask(String context, String question, List<Map<String, Object>> history,
                         Insights.Overview overview, List<TransactionDto> txns) {
         if (!props.isConfigured()) {
             return localRagAnswer(question, overview, txns, "local-rag:no-api-key");
@@ -125,10 +125,12 @@ public class AiCoachService {
 
         List<Map<String, Object>> messages = new ArrayList<>();
         if (history != null) {
-            for (Map<String, String> turn : history) {
-                String role = turn.get("role");
-                String content = turn.get("content");
-                if (role == null || content == null) continue;
+            for (Map<String, Object> turn : history) {
+                Object roleObj = turn.get("role");
+                Object contentObj = turn.get("content");
+                if (roleObj == null || contentObj == null) continue;
+                String role = roleObj.toString();
+                String content = contentObj.toString();
                 messages.add(Map.<String, Object>of("role", role, "content", content));
             }
         }

@@ -75,6 +75,7 @@ function mapAccount(account) {
     ...account,
     accountCategory: account.accountCategory || account.category || 'Personal',
     type: account.accountType || account.type || 'Account',
+    accountCategory: account.accountCategory || 'Personal',
     maskedNumber: account.accountNumber?.slice(-4) ? `•••• ${account.accountNumber.slice(-4)}` : '•••• 0000',
   }
 }

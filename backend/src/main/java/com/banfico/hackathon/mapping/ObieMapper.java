@@ -108,6 +108,7 @@ public class ObieMapper {
                     text(first, "Identification"),
                     firstNonNull(text(a, "AccountCategory"), text(a, "accountCategory"), "Personal"),
                     text(a, "AccountTypeCode"),
+                    firstNonNull(text(a, "AccountCategory"), "Personal"),
                     text(a, "Status"),
                     firstNonNull(text(a, "Currency"), "GBP"),
                     money(text(a, "Balance"))
