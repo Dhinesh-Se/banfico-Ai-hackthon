@@ -1,0 +1,195 @@
+Post Account Transactions:
+API URL: https://core-api.{{domain}}/api/obie-aisp/v4.0/accounts/{{accountId}}/transactions
+
+Request Body:
+{
+    "TransactionReference": "{{transactionRef}}",
+    "Amount": {
+        "Amount": "{{transactionAmount}}",
+        "Currency": "GBP"
+    },
+    "CreditDebitIndicator": "Credit",
+    "Status": "PDNG",
+    "BookingDateTime": "{{$isoTimestamp}}",
+    "ValueDateTime": "{{$isoTimestamp}}",
+    "TransactionInformation": "{{transactionInfo}}",
+    "BankTransactionCode": {
+        "Code": "IssuedCreditTransfer",
+        "SubCode": "AutomaticTransfer"
+    },
+    "ProprietaryBankTransactionCode": {
+        "Code": "Transfer",
+        "Issuer": "CoreBank"
+    },
+    "ExtendedProprietaryBankTransactionCodes": [
+        {
+            "Code": "{{$randomWord}}"
+        }
+    ],
+    "Balance": {
+        "Amount": {
+            "Amount": "{{balanceAmount}}",
+            "Currency": "GBP"
+        },
+        "CreditDebitIndicator": "Credit",
+        "Type": "ITBD"
+    },
+    "PaymentPurposeCode": "CASH",
+    "MerchantDetails": {
+        "MerchantName": "{{$randomCompanyName}}",
+        "MerchantCategoryCode": "1711"
+    },
+    "CreditorAgent": {
+        "SchemeName": "UK.OBIE.BICFI",
+        "Identification": "{{creditorAgentId}}",
+        "PostalAddress": {
+            "AddressLine": "{{$randomStreetAddress}}, {{$randomCity}}, England, {{$randomZipCode}}"
+        }
+    },
+    "CreditorAccount": {
+        "SchemeName": "UK.OBIE.SortCodeAccountNumber"
+    },
+    "DebtorAgent": {
+        "SchemeName": "UK.OBIE.BICFI",
+        "Identification": "{{debtorAgentId}}",
+        "PostalAddress": {
+            "AddressLine": "{{$randomStreetAddress}}, {{$randomCity}}, England, {{$randomZipCode}}"
+        }
+    },
+    "DebtorAccount": {
+        "SchemeName": "UK.OBIE.SortCodeAccountNumber"
+    },
+    "UltimateCreditor": {
+        "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+        "PostalAddress": {
+            "AddressLine": "{{$randomStreetAddress}}, {{$randomCity}}, England, {{$randomZipCode}}"
+        }
+    },
+    "UltimateDebtor": {
+        "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+        "PostalAddress": {
+            "AddressLine": "{{$randomStreetAddress}}, {{$randomCity}}, England, {{$randomZipCode}}"
+        }
+    },
+    "CardInstrument": {
+        "CardSchemeName": "MasterCard",
+        "AuthorisationType": "PIN"
+    }
+}
+
+Scripts:
+Pre-request:
+function randomDigits(length) {
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += Math.floor(Math.random() * 10);
+    }
+    return result;
+}
+
+function randomAmount(min, max) {
+    return (Math.random() * (max - min) + min).toFixed(2);
+}
+
+pm.variables.set("transactionRef", "Ref " + randomDigits(12));
+pm.variables.set("transactionAmount", randomAmount(1, 500));
+pm.variables.set("balanceAmount", randomAmount(50, 5000));
+pm.variables.set("creditorAgentId", randomDigits(14));
+pm.variables.set("debtorAgentId", randomDigits(13));
+
+const descriptions = ["Paid the gas bill", "Grocery shopping", "Monthly rent transfer", "Restaurant payment", "Online subscription", "Utility bill payment"];
+pm.variables.set("transactionInfo", descriptions[Math.floor(Math.random() * descriptions.length)]);
+
+Post-response:
+// Auto-capture the first AccountId from the response and store it as a collection variable
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+
+Response:
+{
+    "Data": {
+        "Transaction": [
+            {
+                "TransactionId": "6a6450abc47905bfc3f1986f",
+                "AccountId": "6a620055c47905bfc3f19693",
+                "TransactionReference": "Ref 975487756565",
+                "Amount": {
+                    "Amount": "315.13",
+                    "Currency": "GBP"
+                },
+                "CreditDebitIndicator": "Credit",
+                "Status": "PDNG",
+                "BookingDateTime": "2026-07-25T05:59:05.366Z",
+                "ValueDateTime": "2026-07-25T05:59:05.366Z",
+                "TransactionInformation": "Restaurant payment",
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "AutomaticTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "CoreBank"
+                },
+                "Balance": {
+                    "Type": "CLAV",
+                    "Amount": {
+                        "Amount": "644.19000",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Credit"
+                },
+                "PaymentPurposeCode": "CASH",
+                "MerchantDetails": {
+                    "MerchantName": "Beer - Gerlach",
+                    "MerchantCategoryCode": "1711"
+                },
+                "CreditorAgent": {
+                    "SchemeName": "UK.OBIE.BICFI",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "29095 Charlotte Island, South Roosevelt, England, 1231412"
+                        ]
+                    },
+                    "Identification": "12435709396378"
+                },
+                "CreditorAccount": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber"
+                },
+                "DebtorAgent": {
+                    "SchemeName": "UK.OBIE.BICFI",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "36504 Jerde Trail, New Gisselle, England, 1231412"
+                        ]
+                    },
+                    "Identification": "7463681219328"
+                },
+                "DebtorAccount": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber"
+                },
+                "UltimateCreditor": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "387 Smitham Pines, Port Mathildehaven, England, 1231412"
+                        ]
+                    }
+                },
+                "UltimateDebtor": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "1959 Gerlach Locks, Bruenshire, England, 1231412"
+                        ]
+                    }
+                },
+                "CardInstrument": {
+                    "CardSchemeName": "MasterCard",
+                    "AuthorisationType": "PIN"
+                }
+            }
+        ]
+    }
+}

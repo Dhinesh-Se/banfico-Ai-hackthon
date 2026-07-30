@@ -1,0 +1,476 @@
+Get Transactions By AccountID:
+API URL: https://core-api.{{domain}}/api/obie-aisp/v4.0/accounts/{{accountId}}/transactions
+
+Request Body:
+"This request doesnot have a body"
+
+Scripts:
+Post-response:
+// Auto-capture the first AccountId from the response and store it as a collection variable
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+Response:
+{
+    "Data": {
+        "Transaction": [
+            {
+                "TransactionId": "6a6448fac47905bfc3f1983c",
+                "AccountId": "6a620055c47905bfc3f19693",
+                "TransactionReference": "Ref 189155096800",
+                "CreditDebitIndicator": "Credit",
+                "Status": "PDNG",
+                "BookingDateTime": "2026-07-25T05:26:16.525Z",
+                "ValueDateTime": "2026-07-25T05:26:16.525Z",
+                "TransactionInformation": "Online subscription",
+                "Amount": {
+                    "Amount": "151.38",
+                    "Currency": "GBP"
+                },
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "AutomaticTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "CoreBank"
+                },
+                "Balance": {
+                    "Type": "CLAV",
+                    "Amount": {
+                        "Amount": "480.44000",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Credit"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Purdy Inc",
+                    "MerchantCategoryCode": "1711"
+                },
+                "CreditorAgent": {
+                    "SchemeName": "UK.OBIE.BICFI",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "305 Meta Isle, Port Patience, England, 1231412"
+                        ]
+                    },
+                    "Identification": "75635936611714"
+                },
+                "CreditorAccount": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber"
+                },
+                "DebtorAgent": {
+                    "SchemeName": "UK.OBIE.BICFI",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "40792 Bayer Cape, Abbyshire, England, 1231412"
+                        ]
+                    },
+                    "Identification": "6725829129800"
+                },
+                "DebtorAccount": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber"
+                },
+                "UltimateCreditor": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "80146 Kulas Drive, Karolannhaven, England, 1231412"
+                        ]
+                    }
+                },
+                "UltimateDebtor": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "3849 Larson Mount, Bayerland, England, 1231412"
+                        ]
+                    }
+                },
+                "CardInstrument": {
+                    "CardSchemeName": "MasterCard",
+                    "AuthorisationType": "PIN"
+                },
+                "PaymentPurposeCode": "CASH"
+            },
+            {
+                "TransactionId": "6a6209b0c47905bfc3f1976f",
+                "AccountId": "6a620055c47905bfc3f19693",
+                "TransactionReference": "Ref 732159096277",
+                "CreditDebitIndicator": "Credit",
+                "Status": "PDNG",
+                "BookingDateTime": "2026-07-23T12:31:44.193Z",
+                "ValueDateTime": "2026-07-23T12:31:44.193Z",
+                "TransactionInformation": "Utility bill payment",
+                "Amount": {
+                    "Amount": "191.81",
+                    "Currency": "GBP"
+                },
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "AutomaticTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "CoreBank"
+                },
+                "Balance": {
+                    "Type": "CLAV",
+                    "Amount": {
+                        "Amount": "520.87000",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Credit"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Romaguera - Christiansen",
+                    "MerchantCategoryCode": "1711"
+                },
+                "CreditorAgent": {
+                    "SchemeName": "UK.OBIE.BICFI",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "0722 Jessyca Station, Lake Marlen, England, 1231412"
+                        ]
+                    },
+                    "Identification": "67499207831083"
+                },
+                "CreditorAccount": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber"
+                },
+                "DebtorAgent": {
+                    "SchemeName": "UK.OBIE.BICFI",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "000 Jeramy Hollow, Torpfurt, England, 1231412"
+                        ]
+                    },
+                    "Identification": "9650653640289"
+                },
+                "DebtorAccount": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber"
+                },
+                "UltimateCreditor": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "359 Ilene Island, Lake Madisynmouth, England, 1231412"
+                        ]
+                    }
+                },
+                "UltimateDebtor": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "900 Rosario Fields, Blandaport, England, 1231412"
+                        ]
+                    }
+                },
+                "CardInstrument": {
+                    "CardSchemeName": "MasterCard",
+                    "AuthorisationType": "PIN"
+                },
+                "PaymentPurposeCode": "CASH"
+            },
+            {
+                "TransactionId": "6a620996c47905bfc3f19769",
+                "AccountId": "6a620055c47905bfc3f19693",
+                "TransactionReference": "Ref 234044125503",
+                "CreditDebitIndicator": "Credit",
+                "Status": "PDNG",
+                "BookingDateTime": "2026-07-23T12:31:17.880Z",
+                "ValueDateTime": "2026-07-23T12:31:17.880Z",
+                "TransactionInformation": "Utility bill payment",
+                "Amount": {
+                    "Amount": "464.99",
+                    "Currency": "GBP"
+                },
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "AutomaticTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "CoreBank"
+                },
+                "Balance": {
+                    "Type": "CLAV",
+                    "Amount": {
+                        "Amount": "794.05000",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Credit"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Green - Lehner",
+                    "MerchantCategoryCode": "1711"
+                },
+                "CreditorAgent": {
+                    "SchemeName": "UK.OBIE.BICFI",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "841 Ariel Valleys, North Laneyview, England, 1231412"
+                        ]
+                    },
+                    "Identification": "20425941116823"
+                },
+                "CreditorAccount": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber"
+                },
+                "DebtorAgent": {
+                    "SchemeName": "UK.OBIE.BICFI",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "071 Alvera Alley, Brekkeville, England, 1231412"
+                        ]
+                    },
+                    "Identification": "2385193136154"
+                },
+                "DebtorAccount": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber"
+                },
+                "UltimateCreditor": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "6535 DuBuque Alley, Santa Maria, England, 1231412"
+                        ]
+                    }
+                },
+                "UltimateDebtor": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "230 Gage Orchard, Fullerton, England, 1231412"
+                        ]
+                    }
+                },
+                "CardInstrument": {
+                    "CardSchemeName": "MasterCard",
+                    "AuthorisationType": "PIN"
+                },
+                "PaymentPurposeCode": "CASH"
+            },
+            {
+                "TransactionId": "6a620988c47905bfc3f19763",
+                "AccountId": "6a620055c47905bfc3f19693",
+                "TransactionReference": "Ref 692484126728",
+                "CreditDebitIndicator": "Credit",
+                "Status": "PDNG",
+                "BookingDateTime": "2026-07-23T12:31:03.816Z",
+                "ValueDateTime": "2026-07-23T12:31:03.816Z",
+                "TransactionInformation": "Grocery shopping",
+                "Amount": {
+                    "Amount": "8.56",
+                    "Currency": "GBP"
+                },
+                "BankTransactionCode": {
+                    "Code": "IssuedCreditTransfer",
+                    "SubCode": "AutomaticTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "CoreBank"
+                },
+                "Balance": {
+                    "Type": "CLAV",
+                    "Amount": {
+                        "Amount": "337.62000",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Credit"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Deckow LLC",
+                    "MerchantCategoryCode": "1711"
+                },
+                "CreditorAgent": {
+                    "SchemeName": "UK.OBIE.BICFI",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "53720 Haag Inlet, Rosenbaumberg, England, 1231412"
+                        ]
+                    },
+                    "Identification": "30264946287020"
+                },
+                "CreditorAccount": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber"
+                },
+                "DebtorAgent": {
+                    "SchemeName": "UK.OBIE.BICFI",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "6827 Terry Park, East Vernborough, England, 1231412"
+                        ]
+                    },
+                    "Identification": "2320415016486"
+                },
+                "DebtorAccount": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber"
+                },
+                "UltimateCreditor": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "40645 Sarah Manors, Paytonmouth, England, 1231412"
+                        ]
+                    }
+                },
+                "UltimateDebtor": {
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                    "PostalAddress": {
+                        "AddressLine": [
+                            "17903 Jason Point, Harrisland, England, 1231412"
+                        ]
+                    }
+                },
+                "CardInstrument": {
+                    "CardSchemeName": "MasterCard",
+                    "AuthorisationType": "PIN"
+                },
+                "PaymentPurposeCode": "CASH"
+            },
+            {
+                "TransactionId": "6a620055c47905bfc3f19698",
+                "AccountId": "6a620055c47905bfc3f19693",
+                "TransactionReference": "Ref 2",
+                "StatementReference": [
+                    "003"
+                ],
+                "CreditDebitIndicator": "Credit",
+                "Status": "BOOK",
+                "BookingDateTime": "2017-04-05T10:43:07.000Z",
+                "ValueDateTime": "2017-04-05T10:45:22.000Z",
+                "TransactionInformation": "Cash from Aubrey",
+                "AddressLine": "Floor 5, 5 Dawson House",
+                "Amount": {
+                    "Amount": "20.00",
+                    "Currency": "GBP"
+                },
+                "ChargeAmount": {
+                    "Amount": "0.02",
+                    "Currency": "GBP"
+                },
+                "CurrencyExchange": {
+                    "ExchangeRate": 2,
+                    "UnitCurrency": "GBP",
+                    "SourceCurrency": "GBP",
+                    "TargetCurrency": "GBP"
+                },
+                "BankTransactionCode": {
+                    "Code": "ReceivedCreditTransfer",
+                    "SubCode": "DomesticCreditTransfer"
+                },
+                "ProprietaryBankTransactionCode": {
+                    "Code": "Transfer",
+                    "Issuer": "AlphaBank"
+                },
+                "Balance": {
+                    "Type": "ITBD",
+                    "Amount": {
+                        "Amount": "230.00000",
+                        "Currency": "GBP"
+                    },
+                    "CreditDebitIndicator": "Credit"
+                },
+                "MerchantDetails": {
+                    "MerchantName": "Merchant's Name",
+                    "MerchantCategoryCode": "5874"
+                },
+                "CreditorAgent": {
+                    "LEI": "IZ9Q00LZEVUKWCQY6X15",
+                    "Name": "The Credit Agent",
+                    "SchemeName": "UK.OBIE.BICFI",
+                    "PostalAddress": {
+                        "Floor": "6",
+                        "Country": "UK",
+                        "PostCode": "Z78 4TY",
+                        "TownName": "London",
+                        "StreetName": "Bank Street",
+                        "AddressType": "BIZZ",
+                        "BuildingNumber": "11"
+                    },
+                    "Identification": "80200112344563"
+                },
+                "CreditorAccount": {
+                    "Name": "Mrs Juniper",
+                    "Proxy": {
+                        "Code": "TELE",
+                        "Identification": "2360549017905189"
+                    },
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                    "Identification": "80200112345679",
+                    "SecondaryIdentification": "80200112374166"
+                },
+                "DebtorAgent": {
+                    "LEI": "IZ9Q00LZEVUKWCQY8I14",
+                    "Name": "The Debtor Agent",
+                    "SchemeName": "UK.OBIE.BICFI",
+                    "PostalAddress": {
+                        "Floor": "6",
+                        "Country": "UK",
+                        "PostCode": "Z78 4TY",
+                        "TownName": "London",
+                        "StreetName": "Bank Street",
+                        "AddressType": "BIZZ",
+                        "BuildingNumber": "11"
+                    },
+                    "Identification": "8020011234488"
+                },
+                "DebtorAccount": {
+                    "Name": "Mr Juniper",
+                    "Proxy": {
+                        "Code": "TELE",
+                        "Identification": "2360549017904578"
+                    },
+                    "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                    "Identification": "80200112345785",
+                    "SecondaryIdentification": "80200112378746"
+                },
+                "UltimateCreditor": {
+                    "LEI": "60450004FECVJV7YN339",
+                    "Name": "Ultimate Creditor",
+                    "SchemeName": "UK.OBIE.BBAN",
+                    "PostalAddress": {
+                        "Floor": "6",
+                        "Country": "UK",
+                        "PostCode": "Z78 4TY",
+                        "TownName": "London",
+                        "StreetName": "Bank Street",
+                        "AddressType": "BIZZ",
+                        "BuildingNumber": "11"
+                    },
+                    "Identification": "2360549017905161585"
+                },
+                "UltimateDebtor": {
+                    "LEI": "8200007YHFDMEODY1965",
+                    "Name": "Ultimate Debtor",
+                    "SchemeName": "UK.OBIE.BBAN",
+                    "PostalAddress": {
+                        "Floor": "6",
+                        "Country": "UK",
+                        "PostCode": "Z78 4TY",
+                        "TownName": "London",
+                        "StreetName": "Bank Street",
+                        "AddressType": "BIZZ",
+                        "BuildingNumber": "11"
+                    },
+                    "Identification": "2360549017905161586"
+                },
+                "CardInstrument": {
+                    "Name": "Mr Juniper",
+                    "CardSchemeName": "VISA",
+                    "AuthorisationType": "Contactless"
+                },
+                "PaymentPurposeCode": "RETL",
+                "CategoryPurposeCode": "TAXS"
+            }
+        ],
+        "Pagination": {
+            "total": 5,
+            "pageIndex": 0,
+            "pageSize": 50
+        }
+    }
+}

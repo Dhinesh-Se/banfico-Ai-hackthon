@@ -1,0 +1,600 @@
+{
+  "info": {
+    "_postman_id": "c929538c-1536-4fff-ba52-fe7bb525b75f",
+    "name": "Hackathon Mock Bank",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "34951296",
+    "_collection_link": "https://go.postman.co/collection/34951296-c929538c-1536-4fff-ba52-fe7bb525b75f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "TOKEN API",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Auto-capture access_token from the response and store it as a collection variable",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "let jsonData;",
+              "try {",
+              "    jsonData = pm.response.json();",
+              "} catch (e) {",
+              "    jsonData = null;",
+              "}",
+              "",
+              "if (jsonData && jsonData.access_token) {",
+              "    pm.collectionVariables.set(\"access_token\", jsonData.access_token);",
+              "    console.log(\"access_token saved to collection variables\");",
+              "} else {",
+              "    console.warn(\"access_token not found in TOKEN API response\");",
+              "}",
+              "",
+              "if (jsonData && jsonData.refresh_token) {",
+              "    pm.collectionVariables.set(\"refresh_token\", jsonData.refresh_token);",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-www-form-urlencoded"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "type": "text",
+              "key": "client_id",
+              "value": "{{client_id}}"
+            },
+            {
+              "type": "text",
+              "key": "client_secret",
+              "value": "{{client_secret}}"
+            },
+            {
+              "type": "text",
+              "key": "username",
+              "value": "{{username}}"
+            },
+            {
+              "type": "text",
+              "key": "password",
+              "value": "{{password}}"
+            },
+            {
+              "type": "text",
+              "key": "grant_type",
+              "value": "password"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://auth.{{domain}}/auth/realms/{{tenant}}/protocol/openid-connect/token",
+          "protocol": "https",
+          "host": [
+            "auth",
+            "{{domain}}"
+          ],
+          "path": [
+            "auth",
+            "realms",
+            "{{tenant}}",
+            "protocol",
+            "openid-connect",
+            "token"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST Accounts",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "function randomDigits(length) {",
+              "    let result = '';",
+              "    for (let i = 0; i < length; i++) {",
+              "        result += Math.floor(Math.random() * 10);",
+              "    }",
+              "    return result;",
+              "}",
+              "",
+              "pm.collectionVariables.set(\"accountIdentification\", randomDigits(14));   // 14-digit sort code + account number",
+              "pm.collectionVariables.set(\"secondaryIdentification\", randomDigits(5));  // 5-digit secondary id",
+              "pm.collectionVariables.set(\"accountBalance\", (Math.random() * 5000).toFixed(2)); // random balance 0-5000",
+              "const nicknames = [\"Savings\", \"Rainy Day\", \"Bills\", \"Holiday Fund\", \"Everyday\", \"Emergency\"];",
+              "pm.variables.set(\"accountNickname\", nicknames[Math.floor(Math.random() * nicknames.length)]);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Auto-capture the first AccountId from the response and store it as a collection variable",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json, text/plain, */*"
+          },
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"Nickname\": \"{{accountNickname}}\",\n    \"StatusUpdateDateTime\": \"{{$isoTimestamp}}\",\n    \"OpeningDate\": \"{{$isoTimestamp}}\",\n    \"Status\": \"Enabled\",\n    \"AccountCategory\": \"Personal\",\n    \"AccountTypeCode\": \"CACC\",\n    \"Balance\": \"{{accountBalance}}\",\n    \"Currency\": \"GBP\",\n    \"Account\": [\n        {\n            \"SchemeName\": \"UK.OBIE.SortCodeAccountNumber\",\n            \"Identification\": \"{{accountIdentification}}\",\n            \"Name\": \"{{$randomFullName}}\",\n            \"SecondaryIdentification\": \"{{secondaryIdentification}}\"\n        }\n    ],\n    \"Servicer\": {\n        \"SchemeName\": \"UK.OBIE.BICFI\",\n        \"Identification\": \"SC802001\",\n        \"Name\": \"ServicerNameSample\"\n    },\n    \"StatementFrequencyAndFormat\": [\n        {\n            \"CommunicationMethod\": \"EMAL\",\n            \"Format\": \"DPDF\",\n            \"Frequency\": \"DAIL\"\n        }\n    ],\n    \"InternationalAccount\": false\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://core-api.{{domain}}/api/obie-aisp/v4.0/accounts",
+          "protocol": "https",
+          "host": [
+            "core-api",
+            "{{domain}}"
+          ],
+          "path": [
+            "api",
+            "obie-aisp",
+            "v4.0",
+            "accounts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Accounts",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Auto-capture the first AccountId from the response and store it as a collection variable",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "let jsonData;",
+              "try {",
+              "    jsonData = pm.response.json();",
+              "} catch (e) {",
+              "    jsonData = null;",
+              "}",
+              "",
+              "if (jsonData && jsonData.Data && Array.isArray(jsonData.Data.Account) && jsonData.Data.Account.length > 0) {",
+              "    const accountId = jsonData.Data.Account[0].AccountId;",
+              "    pm.collectionVariables.set(\"accountId\", accountId);",
+              "    console.log(\"accountId saved to collection variables: \" + accountId);",
+              "} else {",
+              "    console.warn(\"No accounts found in response to extract accountId from\");",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json, text/plain, */*"
+          }
+        ],
+        "url": {
+          "raw": "https://core-api.{{domain}}/api/obie-aisp/v4.0/accounts?type=domestic",
+          "protocol": "https",
+          "host": [
+            "core-api",
+            "{{domain}}"
+          ],
+          "path": [
+            "api",
+            "obie-aisp",
+            "v4.0",
+            "accounts"
+          ],
+          "query": [
+            {
+              "key": "type",
+              "value": "domestic"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Account By AccountId",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Auto-capture the first AccountId from the response and store it as a collection variable",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json, text/plain, */*"
+          }
+        ],
+        "url": {
+          "raw": "https://core-api.{{domain}}/api/obie-aisp/v4.0/accounts/{{accountId}}",
+          "protocol": "https",
+          "host": [
+            "core-api",
+            "{{domain}}"
+          ],
+          "path": [
+            "api",
+            "obie-aisp",
+            "v4.0",
+            "accounts",
+            "{{accountId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Balance By AccountId",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Auto-capture the first AccountId from the response and store it as a collection variable",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json, text/plain, */*"
+          }
+        ],
+        "url": {
+          "raw": "https://core-api.{{domain}}/api/obie-aisp/v4.0/accounts/{{accountId}}/balances",
+          "protocol": "https",
+          "host": [
+            "core-api",
+            "{{domain}}"
+          ],
+          "path": [
+            "api",
+            "obie-aisp",
+            "v4.0",
+            "accounts",
+            "{{accountId}}",
+            "balances"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST Account Transactions",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "function randomDigits(length) {",
+              "    let result = '';",
+              "    for (let i = 0; i < length; i++) {",
+              "        result += Math.floor(Math.random() * 10);",
+              "    }",
+              "    return result;",
+              "}",
+              "",
+              "function randomAmount(min, max) {",
+              "    return (Math.random() * (max - min) + min).toFixed(2);",
+              "}",
+              "",
+              "pm.variables.set(\"transactionRef\", \"Ref \" + randomDigits(12));",
+              "pm.variables.set(\"transactionAmount\", randomAmount(1, 500));",
+              "pm.variables.set(\"balanceAmount\", randomAmount(50, 5000));",
+              "pm.variables.set(\"creditorAgentId\", randomDigits(14));",
+              "pm.variables.set(\"debtorAgentId\", randomDigits(13));",
+              "",
+              "const descriptions = [\"Paid the gas bill\", \"Grocery shopping\", \"Monthly rent transfer\", \"Restaurant payment\", \"Online subscription\", \"Utility bill payment\"];",
+              "pm.variables.set(\"transactionInfo\", descriptions[Math.floor(Math.random() * descriptions.length)]);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Auto-capture the first AccountId from the response and store it as a collection variable",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "accept",
+            "value": "application/json, text/plain, */*"
+          },
+          {
+            "key": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"TransactionReference\": \"{{transactionRef}}\",\n    \"Amount\": {\n        \"Amount\": \"{{transactionAmount}}\",\n        \"Currency\": \"GBP\"\n    },\n    \"CreditDebitIndicator\": \"Credit\",\n    \"Status\": \"PDNG\",\n    \"BookingDateTime\": \"{{$isoTimestamp}}\",\n    \"ValueDateTime\": \"{{$isoTimestamp}}\",\n    \"TransactionInformation\": \"{{transactionInfo}}\",\n    \"BankTransactionCode\": {\n        \"Code\": \"IssuedCreditTransfer\",\n        \"SubCode\": \"AutomaticTransfer\"\n    },\n    \"ProprietaryBankTransactionCode\": {\n        \"Code\": \"Transfer\",\n        \"Issuer\": \"CoreBank\"\n    },\n    \"ExtendedProprietaryBankTransactionCodes\": [\n        {\n            \"Code\": \"{{$randomWord}}\"\n        }\n    ],\n    \"Balance\": {\n        \"Amount\": {\n            \"Amount\": \"{{balanceAmount}}\",\n            \"Currency\": \"GBP\"\n        },\n        \"CreditDebitIndicator\": \"Credit\",\n        \"Type\": \"ITBD\"\n    },\n    \"PaymentPurposeCode\": \"CASH\",\n    \"MerchantDetails\": {\n        \"MerchantName\": \"{{$randomCompanyName}}\",\n        \"MerchantCategoryCode\": \"1711\"\n    },\n    \"CreditorAgent\": {\n        \"SchemeName\": \"UK.OBIE.BICFI\",\n        \"Identification\": \"{{creditorAgentId}}\",\n        \"PostalAddress\": {\n            \"AddressLine\": \"{{$randomStreetAddress}}, {{$randomCity}}, England, {{$randomZipCode}}\"\n        }\n    },\n    \"CreditorAccount\": {\n        \"SchemeName\": \"UK.OBIE.SortCodeAccountNumber\"\n    },\n    \"DebtorAgent\": {\n        \"SchemeName\": \"UK.OBIE.BICFI\",\n        \"Identification\": \"{{debtorAgentId}}\",\n        \"PostalAddress\": {\n            \"AddressLine\": \"{{$randomStreetAddress}}, {{$randomCity}}, England, {{$randomZipCode}}\"\n        }\n    },\n    \"DebtorAccount\": {\n        \"SchemeName\": \"UK.OBIE.SortCodeAccountNumber\"\n    },\n    \"UltimateCreditor\": {\n        \"SchemeName\": \"UK.OBIE.SortCodeAccountNumber\",\n        \"PostalAddress\": {\n            \"AddressLine\": \"{{$randomStreetAddress}}, {{$randomCity}}, England, {{$randomZipCode}}\"\n        }\n    },\n    \"UltimateDebtor\": {\n        \"SchemeName\": \"UK.OBIE.SortCodeAccountNumber\",\n        \"PostalAddress\": {\n            \"AddressLine\": \"{{$randomStreetAddress}}, {{$randomCity}}, England, {{$randomZipCode}}\"\n        }\n    },\n    \"CardInstrument\": {\n        \"CardSchemeName\": \"MasterCard\",\n        \"AuthorisationType\": \"PIN\"\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://core-api.{{domain}}/api/obie-aisp/v4.0/accounts/{{accountId}}/transactions",
+          "protocol": "https",
+          "host": [
+            "core-api",
+            "{{domain}}"
+          ],
+          "path": [
+            "api",
+            "obie-aisp",
+            "v4.0",
+            "accounts",
+            "{{accountId}}",
+            "transactions"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Transactions By AccountId",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Auto-capture the first AccountId from the response and store it as a collection variable",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://core-api.{{domain}}/api/obie-aisp/v4.0/accounts/{{accountId}}/transactions",
+          "protocol": "https",
+          "host": [
+            "core-api",
+            "{{domain}}"
+          ],
+          "path": [
+            "api",
+            "obie-aisp",
+            "v4.0",
+            "accounts",
+            "{{accountId}}",
+            "transactions"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "domain",
+      "value": "obiebank-sbx.banfico.io"
+    },
+    {
+      "key": "client_id",
+      "value": "corebank-spa"
+    },
+    {
+      "key": "client_secret",
+      "value": "corebank-spa-password"
+    },
+    {
+      "key": "username",
+      "value": ""
+    },
+    {
+      "key": "password",
+      "value": ""
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "refresh_token",
+      "value": ""
+    },
+    {
+      "key": "accountId",
+      "value": ""
+    },
+    {
+      "key": "$randomZipCode",
+      "value": "1231412"
+    },
+    {
+      "key": "accountIdentification",
+      "value": "36478885080576"
+    },
+    {
+      "key": "secondaryIdentification",
+      "value": "62361"
+    },
+    {
+      "key": "accountBalance",
+      "value": "1900.28"
+    },
+    {
+      "key": "tenant",
+      "value": "provider"
+    }
+  ]
+}

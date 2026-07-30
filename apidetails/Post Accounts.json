@@ -1,0 +1,97 @@
+Post Accounts details:
+API URL:https://core-api.{{domain}}/api/obie-aisp/v4.0/accounts
+Request Body:
+{
+    "Nickname": "{{accountNickname}}",
+    "StatusUpdateDateTime": "{{$isoTimestamp}}",
+    "OpeningDate": "{{$isoTimestamp}}",
+    "Status": "Enabled",
+    "AccountCategory": "Personal",
+    "AccountTypeCode": "CACC",
+    "Balance": "{{accountBalance}}",
+    "Currency": "GBP",
+    "Account": [
+        {
+            "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+            "Identification": "{{accountIdentification}}",
+            "Name": "{{$randomFullName}}",
+            "SecondaryIdentification": "{{secondaryIdentification}}"
+        }
+    ],
+    "Servicer": {
+        "SchemeName": "UK.OBIE.BICFI",
+        "Identification": "SC802001",
+        "Name": "ServicerNameSample"
+    },
+    "StatementFrequencyAndFormat": [
+        {
+            "CommunicationMethod": "EMAL",
+            "Format": "DPDF",
+            "Frequency": "DAIL"
+        }
+    ],
+    "InternationalAccount": false
+}
+
+Scripts:
+Pre-request:
+function randomDigits(length) {
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += Math.floor(Math.random() * 10);
+    }
+    return result;
+}
+
+pm.collectionVariables.set("accountIdentification", randomDigits(14));   // 14-digit sort code + account number
+pm.collectionVariables.set("secondaryIdentification", randomDigits(5));  // 5-digit secondary id
+pm.collectionVariables.set("accountBalance", (Math.random() * 5000).toFixed(2)); // random balance 0-5000
+const nicknames = ["Savings", "Rainy Day", "Bills", "Holiday Fund", "Everyday", "Emergency"];
+pm.variables.set("accountNickname", nicknames[Math.floor(Math.random() * nicknames.length)]);
+
+Post-response:
+// Auto-capture the first AccountId from the response and store it as a collection variable
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+
+Resposnse:
+{
+    "Data": {
+        "Account": [
+            {
+                "AccountId": "6a644e30c47905bfc3f1985f",
+                "Nickname": "Emergency",
+                "StatusUpdateDateTime": "2026-07-25T05:48:30.909Z",
+                "OpeningDate": "2026-07-25T05:48:30.909Z",
+                "Status": "Enabled",
+                "AccountCategory": "Personal",
+                "AccountTypeCode": "CACC",
+                "Currency": "GBP",
+                "Account": [
+                    {
+                        "Name": "Ms. Jared Schneider",
+                        "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+                        "Identification": "57713372763358",
+                        "SecondaryIdentification": "35045"
+                    }
+                ],
+                "Servicer": {
+                    "Name": "ServicerNameSample",
+                    "SchemeName": "UK.OBIE.BICFI",
+                    "Identification": "SC802001"
+                },
+                "StatementFrequencyAndFormat": [
+                    {
+                        "Format": "DPDF",
+                        "Frequency": "DAIL",
+                        "CommunicationMethod": "EMAL"
+                    }
+                ],
+                "InternationalAccount": false,
+                "MaturityDate": "2026-07-20T07:24:05.211Z"
+            }
+        ]
+    }
+}
