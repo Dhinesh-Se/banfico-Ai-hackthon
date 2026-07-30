@@ -1,9 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import {
-  ArrowRight, CheckCircle2, ShieldAlert, Sparkles, Target, Zap,
-  CreditCard, Wallet, TrendingUp, ChevronRight,
-} from 'lucide-react'
+import { ArrowRight, CheckCircle2, CreditCard, ShieldAlert, Sparkles, Target, Zap } from 'lucide-react'
 import Shell from '../components/Shell.jsx'
 import { CashflowChart, SpendByCategory } from '../components/Charts.jsx'
 import { TransactionList, DashboardSkeleton } from '../components/Widgets.jsx'
@@ -681,9 +678,10 @@ function CardBalance({ account, balance, userName }) {
           <div>
             <p className="text-xs uppercase tracking-[.22em] text-slate-100/80">My Card</p>
             <p className="mt-2 text-sm font-medium text-slate-100/80">{account.nickname}</p>
+            <p className="mt-1 text-[11px] font-semibold uppercase tracking-[.2em] text-white/70">{account.accountCategory || 'Personal'}</p>
           </div>
           <div className="rounded-2xl bg-white/10 px-3 py-2 text-[11px] uppercase tracking-[.24em] text-white/90">
-            Active</div>
+            {account.type || 'Active'}</div>
         </div>
 
         <div className="mt-8 flex items-end justify-between gap-4">
@@ -835,10 +833,12 @@ export default function Dashboard() {
   }
 
   const { accounts, balances, transactions, insights } = data
-  const netWorth = balances.reduce((t, b) => t + b.available, 0)
   const balanceFor = (id) => balances.find((b) => b.accountId === id) || { available: 0 }
+  const selectedAccount = selected ? accounts.find((a) => a.accountId === selected) : null
+  const visibleBalances = selected ? balances.filter((b) => b.accountId === selected) : balances
+  const netWorth = visibleBalances.reduce((t, b) => t + b.available, 0)
   const topCategory = insights.byCategory?.[0]
-  const cardAccount = accounts.find((a) => a.type.toLowerCase().includes('card')) || accounts[0]
+  const cardAccount = selectedAccount || accounts.find((a) => a.type.toLowerCase().includes('card')) || accounts[0]
   const cardBalance = balanceFor(cardAccount.accountId)
   const recentTransactions = selectedTransactions.slice(0, 4)
   const spent = insights.summary.expense
@@ -858,10 +858,12 @@ export default function Dashboard() {
                   <div className="min-w-0">
                     <p className="uppercase tracking-[.22em] text-slate-300">Dashboard overview</p>
                     <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                      {gbp(netWorth)} available across your accounts
+                      {selectedAccount ? `${gbp(netWorth)} available in ${selectedAccount.nickname}` : `${gbp(netWorth)} available across your accounts`}
                     </h1>
                     <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
-                      Your balances, spending and savings are all shown in one place with the latest insights from Banfico.
+                      {selectedAccount
+                        ? `${selectedAccount.nickname} is selected (${selectedAccount.accountCategory || 'Personal'}), so balances and recent activity are scoped to that account.`
+                        : 'Your balances, spending and savings are all shown in one place with the latest insights from Banfico.'}
                     </p>
                   </div>
                   <div className="grid gap-3 sm:grid-cols-3">
@@ -874,6 +876,56 @@ export default function Dashboard() {
                     />
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <div className="card p-5">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                  <p className="eyebrow">Bank account access</p>
+                  <h2 className="mt-1 text-base font-semibold text-navy-900">Choose the account to watch</h2>
+                  <p className="mt-1 text-sm text-slate-500">Filter balances, recent activity and the card preview by a single bank account and its account category.</p>
+                </div>
+                <select
+                  className="field w-full lg:w-72"
+                  value={selected || 'all'}
+                  onChange={(e) => setSelected(e.target.value === 'all' ? null : e.target.value)}
+                >
+                  <option value="all">All connected accounts</option>
+                  {accounts.map((account) => (
+                    <option key={account.accountId} value={account.accountId}>
+                      {account.nickname} · {account.accountCategory || 'Personal'}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                {accounts.map((account) => {
+                  const active = selected === account.accountId
+                  const balance = balanceFor(account.accountId)
+                  return (
+                    <button
+                      key={account.accountId}
+                      type="button"
+                      onClick={() => setSelected(active ? null : account.accountId)}
+                      className={`rounded-3xl border p-4 text-left transition ${
+                        active ? 'border-teal-400 bg-teal-50 shadow-sm' : 'border-slate-200 bg-white hover:border-teal-200 hover:bg-slate-50'
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-navy-900 text-white">
+                          <CreditCard size={17} />
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm font-semibold text-navy-900">{account.nickname}</span>
+                          <span className="mt-1 block text-xs text-slate-500">{account.accountCategory || 'Personal'} · {account.type}</span>
+                          <span className="mt-3 block tnum text-lg font-semibold text-navy-900">{gbp(balance.available)}</span>
+                        </span>
+                      </div>
+                    </button>
+                  )
+                })}
               </div>
             </div>
 
