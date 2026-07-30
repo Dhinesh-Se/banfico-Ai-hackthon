@@ -13,6 +13,7 @@ public class BankApiProperties {
     private String clientSecret;
     private String username;
     private String password;
+    private boolean mockEnabled = true;
 
     public String getAuthUrl() {
         return "https://auth." + domain + "/auth/realms/" + tenant + "/protocol/openid-connect/token";
@@ -40,4 +41,7 @@ public class BankApiProperties {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public boolean isMockEnabled() { return mockEnabled; }
+    public void setMockEnabled(boolean mockEnabled) { this.mockEnabled = mockEnabled; }
 }

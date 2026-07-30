@@ -1,0 +1,85 @@
+{
+  "Data": {
+    "Transaction": [
+      {
+        "TransactionId": "6a6450abc47905bfc3f1986f",
+        "AccountId": "6a620055c47905bfc3f19693",
+        "TransactionReference": "Ref 975487756565",
+        "Amount": {
+          "Amount": "315.13",
+          "Currency": "GBP"
+        },
+        "CreditDebitIndicator": "Credit",
+        "Status": "PDNG",
+        "BookingDateTime": "2026-07-25T05:59:05.366Z",
+        "ValueDateTime": "2026-07-25T05:59:05.366Z",
+        "TransactionInformation": "Restaurant payment",
+        "BankTransactionCode": {
+          "Code": "IssuedCreditTransfer",
+          "SubCode": "AutomaticTransfer"
+        },
+        "ProprietaryBankTransactionCode": {
+          "Code": "Transfer",
+          "Issuer": "CoreBank"
+        },
+        "Balance": {
+          "Type": "CLAV",
+          "Amount": {
+            "Amount": "644.19000",
+            "Currency": "GBP"
+          },
+          "CreditDebitIndicator": "Credit"
+        },
+        "PaymentPurposeCode": "CASH",
+        "MerchantDetails": {
+          "MerchantName": "Beer - Gerlach",
+          "MerchantCategoryCode": "1711"
+        },
+        "CreditorAgent": {
+          "SchemeName": "UK.OBIE.BICFI",
+          "PostalAddress": {
+            "AddressLine": [
+              "29095 Charlotte Island, South Roosevelt, England, 1231412"
+            ]
+          },
+          "Identification": "12435709396378"
+        },
+        "CreditorAccount": {
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber"
+        },
+        "DebtorAgent": {
+          "SchemeName": "UK.OBIE.BICFI",
+          "PostalAddress": {
+            "AddressLine": [
+              "36504 Jerde Trail, New Gisselle, England, 1231412"
+            ]
+          },
+          "Identification": "7463681219328"
+        },
+        "DebtorAccount": {
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber"
+        },
+        "UltimateCreditor": {
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+          "PostalAddress": {
+            "AddressLine": [
+              "387 Smitham Pines, Port Mathildehaven, England, 1231412"
+            ]
+          }
+        },
+        "UltimateDebtor": {
+          "SchemeName": "UK.OBIE.SortCodeAccountNumber",
+          "PostalAddress": {
+            "AddressLine": [
+              "1959 Gerlach Locks, Bruenshire, England, 1231412"
+            ]
+          }
+        },
+        "CardInstrument": {
+          "CardSchemeName": "MasterCard",
+          "AuthorisationType": "PIN"
+        }
+      }
+    ]
+  }
+}
