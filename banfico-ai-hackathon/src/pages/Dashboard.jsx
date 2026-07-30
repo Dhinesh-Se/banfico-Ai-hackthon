@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight, CheckCircle2, ShieldAlert, Sparkles, Target, Zap } from 'lucide-react'
 import Shell from '../components/Shell.jsx'
 import { CashflowChart, SpendByCategory } from '../components/Charts.jsx'
 import { TransactionList, DashboardSkeleton } from '../components/Widgets.jsx'
@@ -9,6 +9,79 @@ import { api } from '../api/client.js'
 import { gbp, catColor, longDate, shortDate } from '../lib/format.js'
 
 const DAILY_LIMIT = 2500
+
+
+function ScenarioCard({ icon: Icon, title, question, answer, tone = 'teal' }) {
+  const tones = {
+    teal: 'bg-teal-500/10 text-teal-600 ring-teal-100',
+    blue: 'bg-brandblue-100 text-brandblue-600 ring-brandblue-100',
+    amber: 'bg-alert/10 text-alert ring-alert/20',
+    red: 'bg-danger/10 text-danger ring-danger/20',
+  }
+
+  return (
+    <div className="rounded-3xl border border-slate-100 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-rail">
+      <div className="flex items-start gap-3">
+        <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-2xl ring-1 ${tones[tone]}`}>
+          <Icon size={18} />
+        </span>
+        <div className="min-w-0">
+          <p className="text-[13px] font-semibold text-navy-900">{title}</p>
+          <p className="mt-1 text-[12px] font-medium text-slate-400">“{question}”</p>
+          <p className="mt-2 text-[12.5px] leading-relaxed text-slate-600">{answer}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ScenarioDeck({ insights, netWorth }) {
+  const topCategory = insights.byCategory?.[0]
+  const anomaly = insights.anomalies?.[0]?.transaction || insights.anomalies?.[0]
+  const subscriptionTotal = insights.subscriptions?.reduce((sum, s) => sum + Number(s.annualised || 0), 0) || 0
+
+  return (
+    <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+      <ScenarioCard
+        icon={Target}
+        title="Payday safety check"
+        question="Can I spend £150 this weekend?"
+        answer={`${gbp(netWorth)} is available now; MoneySense compares this with current-month expense and savings rate before giving a safe yes/no.`}
+      />
+      <ScenarioCard
+        icon={Zap}
+        title="Spending drift"
+        question="Why am I saving less?"
+        answer={topCategory ? `${topCategory.category} leads spend at ${gbp(topCategory.amount)} and is the first place to review.` : 'Connect transactions to reveal the category moving fastest.'}
+        tone="blue"
+      />
+      <ScenarioCard
+        icon={ShieldAlert}
+        title="Fraud/anomaly triage"
+        question="Anything suspicious?"
+        answer={anomaly ? `${anomaly.merchant} is already flagged, so the next step is receipt check or dispute.` : 'No current anomalies are flagged in this view.'}
+        tone="red"
+      />
+      <ScenarioCard
+        icon={CheckCircle2}
+        title="Subscription leakage"
+        question="What can I cancel?"
+        answer={subscriptionTotal ? `${gbp(subscriptionTotal)} annual recurring spend is ready for review.` : 'Recurring charges will appear here once detected.'}
+        tone="amber"
+      />
+    </div>
+  )
+}
+
+function AiModePill({ mode }) {
+  const local = mode?.startsWith('local-rag')
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[.18em] ${local ? 'bg-alert/10 text-alert' : 'bg-teal-100 text-teal-600'}`}>
+      <span className={`h-1.5 w-1.5 rounded-full ${local ? 'bg-alert' : 'bg-teal-500'}`} />
+      {local ? 'Offline RAG' : 'Hosted AI'}
+    </span>
+  )
+}
 
 function ProgressBar({ value }) {
   return (
@@ -135,6 +208,7 @@ export default function Dashboard() {
   const [data, setData] = useState(null)
   const [obs, setObs] = useState([])
   const [obsLoading, setObsLoading] = useState(true)
+  const [aiMode, setAiMode] = useState('local-rag:no-api-key')
   const [error, setError] = useState('')
   const [selected, setSelected] = useState(null)
 
@@ -153,6 +227,11 @@ export default function Dashboard() {
       .then((o) => alive && setObs(o))
       .catch(() => {})
       .finally(() => alive && setObsLoading(false))
+
+    api
+      .getCoach()
+      .then((coach) => alive && setAiMode(coach.mode || 'hosted-llm'))
+      .catch(() => alive && setAiMode('local-rag:no-api-key'))
 
     return () => {
       alive = false
@@ -229,6 +308,8 @@ export default function Dashboard() {
               </div>
             </div>
 
+            <ScenarioDeck insights={insights} netWorth={netWorth} />
+
             <div className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
               <CashflowChart data={insights.byMonth} />
               <SpendByCategory data={insights.byCategory} />
@@ -277,17 +358,20 @@ export default function Dashboard() {
             <RecentActivity items={recentTransactions} />
 
             <div className="card p-5">
-              <div className="flex items-center gap-3">
-                <div className="rounded-2xl bg-teal-500/10 p-3 text-teal-600">
-                  <Sparkles size={18} />
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-2xl bg-teal-500/10 p-3 text-teal-600">
+                    <Sparkles size={18} />
+                  </div>
+                  <div>
+                    <p className="eyebrow">Insight engine</p>
+                    <p className="mt-1 text-base font-semibold text-navy-900">Judge-safe AI status</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="eyebrow">Insight</p>
-                  <p className="mt-1 text-base font-semibold text-navy-900">What the AI suggests</p>
-                </div>
+                <AiModePill mode={aiMode} />
               </div>
               <p className="mt-4 text-sm leading-relaxed text-slate-600">
-                Your eating out spend is above average this month. The dashboard spots anomalies and gives you clear next steps to save more.
+                {obs[0]?.body || 'The assistant uses deterministic analytics first, then hosted AI or offline RAG narration so the demo still works if a token dies.'}
               </p>
             </div>
 

@@ -37,7 +37,7 @@ export default function ChatPanel({ compact = false }) {
       const res = await api.chat(next.filter((m) => m.role !== 'action'))
       setMessages([
         ...next,
-        { role: 'assistant', content: res.reply, proposedAction: res.proposedAction || null },
+        { role: 'assistant', content: res.reply, proposedAction: res.proposedAction || null, mode: res.mode, sources: res.sources || [] },
       ])
     } catch {
       setMessages([
@@ -163,6 +163,15 @@ function Bubble({ message }) {
         >
           {message.content}
         </div>
+
+        {!mine && message.mode && (
+          <div className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[11px] text-slate-400">
+            <span className="rounded-full bg-slate-100 px-2 py-0.5 font-mono">{message.mode}</span>
+            {message.sources?.slice(0, 3).map((source) => (
+              <span key={source} className="rounded-full bg-teal-100/60 px-2 py-0.5 text-teal-600">{source}</span>
+            ))}
+          </div>
+        )}
 
         {/* The agentic moment: the assistant proposes, the human approves. */}
         {message.proposedAction && state !== 'done' && (
