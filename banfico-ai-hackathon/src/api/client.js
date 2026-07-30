@@ -6,7 +6,7 @@
 // them. Change it only by talking to the other two.
 //
 //  GET  /api/accounts
-//       -> [{ accountId, nickname, type, bank, currency, maskedNumber, iban }]
+//       -> [{ accountId, nickname, accountCategory, type, bank, currency, maskedNumber, iban }]
 //
 //  GET  /api/balances
 //       -> [{ accountId, currency, available, current, asOf }]
@@ -73,6 +73,7 @@ async function live(path, options = {}) {
 function mapAccount(account) {
   return {
     ...account,
+    accountCategory: account.accountCategory || account.category || 'Personal',
     type: account.accountType || account.type || 'Account',
     maskedNumber: account.accountNumber?.slice(-4) ? `•••• ${account.accountNumber.slice(-4)}` : '•••• 0000',
   }

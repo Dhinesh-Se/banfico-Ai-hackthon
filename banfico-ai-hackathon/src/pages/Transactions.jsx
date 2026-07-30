@@ -81,10 +81,10 @@ export default function Transactions() {
         </div>
 
         <select className="field w-auto" value={account} onChange={(e) => setAccount(e.target.value)}>
-          <option value="all">All loaded accounts</option>
+          <option value="all">All loaded accounts and categories</option>
           {accounts.map((a) => (
             <option key={a.accountId} value={a.accountId}>
-              {a.nickname}
+              {a.nickname} · {a.accountCategory || 'Personal'}
             </option>
           ))}
         </select>

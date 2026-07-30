@@ -22,6 +22,9 @@ bank:
   client-secret: ${BANK_CLIENT_SECRET:corebank-spa-password}
   username: ${BANK_USERNAME:}
   password: ${BANK_PASSWORD:}
+  # Sandbox API access can be disabled/revoked during demos; keep the app
+  # online by serving the captured OBIE JSON payloads from apidetails.
+  mock-enabled: ${BANK_MOCK_ENABLED:true}
 
 # ── Portal login (your own login page) ───────────────────────────────────────
 app:
