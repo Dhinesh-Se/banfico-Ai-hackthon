@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Endpoints the React app calls. These now return NORMALISED DTOs rather than
@@ -29,9 +31,17 @@ public class BankController {
         this.aggregation = aggregation;
     }
 
+    /**
+     * Returns all accounts, optionally filtered by category (e.g. ?category=Personal).
+     * AccountCategory comes directly from the OBIE AccountCategory field.
+     */
     @GetMapping("/accounts")
-    public List<AccountDto> getAccounts() {
-        return aggregation.accounts();
+    public List<AccountDto> getAccounts(@RequestParam(required = false) String category) {
+        List<AccountDto> all = aggregation.accounts();
+        if (category == null || category.isBlank()) return all;
+        return all.stream()
+                .filter(a -> category.equalsIgnoreCase(a.accountCategory()))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/accounts/{accountId}")

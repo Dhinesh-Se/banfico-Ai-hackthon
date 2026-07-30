@@ -16,7 +16,7 @@ public class ChatController {
         this.ai = ai;
     }
 
-    public record ChatRequest(String message, List<Map<String, String>> history) {}
+    public record ChatRequest(String message, List<Map<String, Object>> history) {}
 
     /** Conversational financial assistant. */
     @PostMapping("/chat")

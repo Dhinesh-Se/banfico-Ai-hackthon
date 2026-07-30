@@ -7,6 +7,7 @@ public record AccountDto(
         String nickname,
         String accountNumber,
         String accountType,
+        String accountCategory,
         String status,
         String currency,
         BigDecimal balance
