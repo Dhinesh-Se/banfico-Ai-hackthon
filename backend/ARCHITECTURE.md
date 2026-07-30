@@ -20,7 +20,7 @@
 │  service/      AggregationService ──► InsightsService (pure Java) │
 │                      │                       │                   │
 │                      │                       ▼                   │
-│                      │                AiCoachService ──► Claude   │
+│                      │                AiCoachService ──► Claude or local RAG   │
 │                      ▼                                           │
 │  mapping/      ObieMapper + CategoryResolver                     │
 │                      │                                           │
@@ -66,8 +66,7 @@ delta, top merchants, subscription detection, z-score anomaly detection, and a
 **`AggregationService`** — fans out across accounts and composes one `Overview`.
 Blocks on the reactive client, which is correct in a servlet app.
 
-**`AiCoachService`** — the only component that talks to Claude. Receives finished
-figures and narrates them.
+**`AiCoachService`** — the only component that talks to hosted AI. Receives finished figures and narrates them. If the API key is missing or the provider is down, it falls back to a local retrieval/rules coach over computed insight facts, so demo coaching still works offline.
 
 ## Why AI never does arithmetic
 
@@ -75,9 +74,7 @@ figures and narrates them.
 finished figures to the model with an explicit instruction never to calculate or
 invent one. A hallucinated total is the single most damaging thing that can happen
 in a finance demo — once a judge finds a figure that does not reconcile, nothing
-else you show is trusted. This split also means the dashboard still works with no
-API key, and the AI failing degrades to a 503 on one endpoint instead of breaking
-the app.
+else you show is trusted. This split also means the dashboard and assistant still work with no API key: hosted AI failures degrade to `mode=local-rag:*` answers instead of breaking the app.
 
 ## Frontend contract
 

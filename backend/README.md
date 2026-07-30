@@ -3,13 +3,12 @@
 A Spring Boot **BFF (Backend-for-Frontend)** that sits between a React dashboard
 and the Banfico OBIE AISP v4.0 sandbox. It aggregates accounts, balances and
 transactions into one coherent view, runs a deterministic financial-insights
-engine over that data, and layers an AI coach (Claude) on top to narrate it —
-without ever letting the model touch the arithmetic.
+engine over that data, and layers an AI coach on top to narrate it — hosted Claude when a token exists, or a local retrieval/rules coach when it does not — without ever letting the model touch the arithmetic.
 
 ```
 React (Vite) ──► Spring Boot BFF ──► Banfico OBIE sandbox (accounts/balances/transactions)
                         │
-                        └──► Anthropic API (Claude) — narration only, no math
+                        └──► AI coach — Anthropic when configured, local RAG fallback otherwise
 ```
 
 ---
@@ -189,6 +188,19 @@ provider) is structured — this is the correct shape, not a shortcut.
 | `GlobalExceptionHandler` | Converts upstream 401/404/5xx and internal errors into clean, typed JSON error bodies instead of raw stack traces. |
 
 ---
+
+
+### Offline AI / RAG fallback
+
+Hackathon demos fail when a third-party API key expires five minutes before judging.
+`AiCoachService` now treats hosted LLM access as optional: when `ANTHROPIC_API_KEY`
+is missing or the provider call fails, it builds a small in-memory knowledge base from
+`Insights.Overview` facts (`health`, `category`, `subscription`, `anomaly`, and recent
+transaction snippets), retrieves the most relevant snippets for the user's question,
+and returns a grounded answer with a `mode` such as `local-rag:no-api-key`. This is
+not a replacement for Spring AI, but it is the correct seam for it: swap the in-memory
+retriever for Spring AI `ChatClient` + `VectorStore` while keeping deterministic Java
+insights as the source of truth.
 
 ## Caching architecture
 

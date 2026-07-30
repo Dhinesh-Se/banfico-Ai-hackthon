@@ -138,7 +138,55 @@ function mapInsights(raw) {
       ...a,
       transaction: mapTransaction(a.transaction),
     })),
+    health: raw?.health || null,
   }
+}
+
+
+function mapHealthObservation(o, index = 0) {
+  const severity = o.severity === 'warning' ? 'alert' : o.severity || 'info'
+  return {
+    id: `health-${index}`,
+    severity,
+    title: o.title || 'Financial health observation',
+    body: o.detail || '',
+    action: null,
+  }
+}
+
+function buildObservationsFromOverview(raw = {}) {
+  const observations = (raw.health?.observations || []).map(mapHealthObservation)
+
+  ;(raw.anomalies || []).slice(0, 2).forEach((a, index) => {
+    const tx = mapTransaction(a.transaction || {})
+    observations.push({
+      id: `anomaly-${tx.transactionId || index}`,
+      severity: 'danger',
+      title: `Check ${tx.merchant}`,
+      body: `${gbpLike(tx.amount)} was flagged: ${a.reason || tx.anomalyReason || 'unusual compared with your normal pattern.'}`,
+      action: {
+        type: 'DRAFT_DISPUTE',
+        label: 'Prepare dispute note',
+        payload: { transactionId: tx.transactionId, amount: tx.amount },
+      },
+    })
+  })
+
+  ;(raw.subscriptions || []).slice(0, 1).forEach((sub) => {
+    observations.push({
+      id: `subscription-${sub.merchant}`,
+      severity: 'info',
+      title: `Review ${sub.merchant}`,
+      body: `Recurring cost is about ${gbpLike(Number(sub.estimatedAnnualCost || 0))} per year. Confirm it is still worth keeping.`,
+      action: null,
+    })
+  })
+
+  return observations.slice(0, 5)
+}
+
+function gbpLike(value) {
+  return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(Number(value || 0))
 }
 
 export const api = {
@@ -256,7 +304,13 @@ export const api = {
 
   async getObservations() {
     if (USE_MOCK) return sleep(620).then(() => mock.observations)
-    return []
+    const raw = await live('/insights/overview')
+    return buildObservationsFromOverview(raw)
+  },
+
+  async getCoach() {
+    if (USE_MOCK) return sleep(300).then(() => ({ mode: 'local-rag:mock-demo', sources: ['health', 'category'] }))
+    return live('/insights/coach')
   },
 
   async chat(messages) {
@@ -264,7 +318,13 @@ export const api = {
       await sleep(900)
       return mockReply(messages.at(-1)?.content || '')
     }
-    return live('/chat', { method: 'POST', body: JSON.stringify({ message: messages.at(-1)?.content || '', history: messages }) })
+    const res = await live('/chat', { method: 'POST', body: JSON.stringify({ message: messages.at(-1)?.content || '', history: messages }) })
+    return {
+      reply: res.reply || res.answer || '',
+      proposedAction: res.proposedAction || null,
+      mode: res.mode || 'hosted-llm',
+      sources: res.sources || [],
+    }
   },
 
   async executeAction(action) {
