@@ -13,21 +13,20 @@ spring:
 # This is the sandbox credential your app uses to call the bank. It is NOT the
 # credential your portal users log in with (see app.portal-* below).
 #
-# Values default to what was already here so nothing breaks, but every one can be
-# overridden by an env var. Prefer that: this file is in git, and the password has
-# already travelled through a zip file.
+# Values must be supplied through environment variables for live sandbox access.
+# Never commit real bank credentials; the app still starts for mock/offline demos.
 bank:
   domain: ${BANK_DOMAIN:obiebank-sbx.banfico.io}
   tenant: ${BANK_TENANT:provider}
   client-id: ${BANK_CLIENT_ID:corebank-spa}
   client-secret: ${BANK_CLIENT_SECRET:corebank-spa-password}
-  username: ${BANK_USERNAME:nivas.ganesan+aihackathonteamf@banfico.com}
-  password: ${BANK_PASSWORD:KWRB@(7h2Gk2L1(8daiw}
+  username: ${BANK_USERNAME:}
+  password: ${BANK_PASSWORD:}
 
 # ── Portal login (your own login page) ───────────────────────────────────────
 app:
-  portal-username: ${PORTAL_USERNAME:nivas.ganesan+aihackathonteamf@banfico.com}
-  portal-password: ${PORTAL_PASSWORD:KWRB@(7h2Gk2L1(8daiw}
+  portal-username: ${PORTAL_USERNAME:demo@banfico.com}
+  portal-password: ${PORTAL_PASSWORD:hackathon}
   session-ttl-minutes: 480
   cors-origins:
     - http://localhost:5173
